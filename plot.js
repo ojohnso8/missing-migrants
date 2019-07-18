@@ -28,7 +28,7 @@ var trace1 = [{
   
   // Apply the group bar mode to the layout
   var layout = {
-    title: "Route vs Total Missing",
+    title: "Region of Incident vs Total Missing",
     yaxis:{
         automargin: true,}
   };
