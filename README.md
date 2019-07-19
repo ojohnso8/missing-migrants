@@ -1,2 +1,2 @@
 #Missing Migrants Project:
-(link)
+https://ojohnso8.github.io/group-project-two/
