@@ -1,37 +1,29 @@
 //Horizontal Bar for Migration Route vs. Total Dead/Missing
-// Sort the data array using the Migration Route value
-data.sort(function(a, b) {
-    return parseFloat(b.Region_of_Incident) - parseFloat(a.Region_of_Incident);
-  });
-   
-  // Reverse the array due to Plotly's defaults
-  data = data.reverse();
+var regions = [...new Set(data.map(data => data.Region_of_Incident))];
+var deadAndMissingByRegion = []
 
-var result= data.reduce(function(tot, arr){
-  return tot + arr.Total_Dead_and_Missing;
-},0);
-console.log(result); 
+regions.forEach(r => {
+  var deaths = data.filter( d => d.Region_of_Incident === r).reduce((total, arr) => {return total + arr.Total_Dead_and_Missing}, 0);
+  deadAndMissingByRegion.push({region: r, deaths: deaths});
+});
 
-
-const regions = [...new Set(data.map(data => data.Region_of_Incident))]
-console.log(regions)
- 
+deadAndMissingByRegion.sort((a,b) => a.deaths - b.deaths);
+console.log(deadAndMissingByRegion); 
    
 // Trace1 for the Migration vs Total Dead/Missing Data
 var trace1 = [{
-    x: result,
-    y: regions,
+    x: deadAndMissingByRegion.map(deadAndMissingByRegion => deadAndMissingByRegion.region),
+    y: deadAndMissingByRegion.map(deadAndMissingByRegion=>deadAndMissingByRegion.deaths),
     type: "bar",
-    orientation: "h"
+    //orientation: "h"
   }];
-  //console.log(data.Total_Dead_and_Missing, data.Migration_Route);
   
   // Apply the group bar mode to the layout
   var layout = {
     title: "Region of Incident vs Total Missing",
     yaxis:{
-        automargin: true,}
-  };
+        automargin: true,},
+  };    
   
 // Render the plot to the div tag with id "plot"
 Plotly.newPlot("plot", trace1, layout);
